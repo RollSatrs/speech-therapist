@@ -1,1 +1,4 @@
-export const session: Record<string, {step: string; data?: any}>={}
+import { SessionType,  } from "../interface/interface.sessions";
+
+export const session: Record<string, SessionType>={}
+
