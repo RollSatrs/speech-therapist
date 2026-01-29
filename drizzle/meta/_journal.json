@@ -8,6 +8,13 @@
       "when": 1768504611432,
       "tag": "0000_mixed_marten_broadcloak",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1769672605956,
+      "tag": "0001_wise_bulldozer",
+      "breakpoints": true
     }
   ]
 }

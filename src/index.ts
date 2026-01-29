@@ -41,7 +41,7 @@ client.on('message', async (msg) => {
   const chatId = msg.from;
   const rawText = msg.body
   const text = rawText.toLowerCase();
-
+  
   if (!session[chatId]) {
     console.log('sesion')
     session[chatId] = {
@@ -51,6 +51,7 @@ client.on('message', async (msg) => {
     };
   }
   const sessions = session[chatId]
+  sessions.meta = sessions.meta ?? {}
   const lang = sessions.meta?.language
   if(sessions.step === Steps.start){
     if(text === 'старт'){
@@ -61,7 +62,7 @@ client.on('message', async (msg) => {
   }
 
   sessions.data ??= {}
-
+  
   if(sessions.step == Steps.language.choose){
     if (!['русский', 'қазақша', 'english'].includes(text)) return;
     sessions.meta ??= {}
@@ -170,36 +171,43 @@ client.on('message', async (msg) => {
     sessions.step = Steps.test.testInit
   }
   
-  if(sessions.step === Steps.test.testInit){
-    const ageStr = sessions.data.child?.age!
-    const ageNum = parseInt(ageStr)
-    const testForChild = getTestByAge(ageNum)
-    console.log(testForChild)
+  if (sessions.step === Steps.test.testInit) {
+    const ageStr = sessions.data.child?.age!;
+    const ageNum = parseInt(ageStr);
+    const testForChild = getTestByAge(ageNum);
+2 
+    let lang: 'ru' | 'kz' | 'en' = 'ru';
+    if (sessions.meta?.language === 'қазақша') lang = 'kz';
+    if (sessions.meta?.language === 'english') lang = 'en';
 
-    let lang: 'ru' | 'kz' | 'en' = 'ru'
-    if (sessions.meta?.language === 'қазақша') lang = 'kz'
-    if (sessions.meta?.language === 'english') lang = 'en'
+    const firstQuestion = testForChild.test[0].question[lang];
 
-    const firstQuestion = testForChild.test[0].question[lang]
-    await client.sendMessage(chatId, firstQuestion, {sendSeen: false})
-    sessions.step = Steps.test.testAnswerSave
+    // Красивое форматирование с номерами вариантов
+    const answerText = testForChild.test[0].answer
+      .map((a, idx) => `${idx + 1}. ${a.text[lang]}`)
+      .join('\n');
+
+    const test_text = `❓ *Вопрос:*\n${firstQuestion}\n\n📝 *Варианты ответов:*\n${answerText}`;
+
+    await client.sendMessage(chatId, test_text, { sendSeen: false });
     console.log(
       'Вот данные:\n' +
       JSON.stringify(sessions, null, 2)
     );
+    sessions.step = Steps.test.testAnswerSave;
+    sessions.meta.questionIndex = 0;
+    return;
   }
 
   if(sessions.step === Steps.test.testAnswerSave){
-    
+    const ageStr = sessions.data.child?.age!
+    const ageNum = parseInt(ageStr)
+    const questionIndex = sessions.meta.questionIndex
+
   }
 
 
-
   if(sessions.step === Steps.results.show){
-    console.log(
-      'Вот данные:\n' +
-      JSON.stringify(sessions, null, 2)
-    );
     
     delete session[chatId];
     return

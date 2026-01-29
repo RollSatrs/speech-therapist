@@ -25,8 +25,9 @@ export const ageMap: Record<'2' | '3' | '4' | '5' | '6' | '7', childAgeType> = {
 
 export type pointTest = 0 | 1 | 2
 
-export interface SessionMeta{
-  language?: language;
+export interface SessionMeta{ 
+  language?: language; 
+  questionIndex?: number 
 } 
 
 export interface TestType{
@@ -57,6 +58,7 @@ interface SessionData {
     fullname?: string;
     age?: string;
   };
+  testAnswers?: { questionText: string, answerText: string }[]
 }
 
 export const Steps = {
