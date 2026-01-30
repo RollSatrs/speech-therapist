@@ -57,6 +57,6 @@ export const handlerParentPhone: StepHandler = async ({
       s.step = StepsUpdate.childPickOrCreate
     }
   }else{
-    'скоро начну делать'
+    
   }
 };

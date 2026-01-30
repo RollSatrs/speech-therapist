@@ -43,9 +43,6 @@ client.on('message', async (msg) => {
   const handler = stepHandlers[s.step]
   if(!handler) return
   await handler({client, db, chatId, rawText, text, s})
-
-
-
 });
 
 client.initialize();
