@@ -15,6 +15,13 @@ export function getTestByAge(ageNumber: number){
 export function getActiveLanguageSystem(lanInput: language){
     let lang: 'ru' | 'kz' | 'en' = 'ru'
     if(lanInput === 'қазақша') lang = "kz"
-    if (lanInput === 'english') lang = 'en'
     return lang
+}
+
+export function normalizePhone(input: string): string {
+  return input.replace(/\D/g, "");
+}
+
+export function isValidPhone(phone: string): boolean{
+  return phone.startsWith("8") && phone.length === 11;
 }
