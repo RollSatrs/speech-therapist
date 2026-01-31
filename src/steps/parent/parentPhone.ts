@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
-import { errLanguageText, invalidPhoneKz, invalidPhoneRu, menuKz, menuRu, noChildProfileKz, noChildProfileRu } from "../const/constante.text";
-import { StepsUpdate } from "../const/sesion";
-import { childrenTable, parentsTable } from "../db/schema";
-import { isValidPhone, normalizePhone } from "../tools/tools";
-import { StepHandler } from "../types/stepContext";
+import { askChildFullNameKz, askParentNameKz, askParentNameRu, errLanguageText, invalidPhoneKz, invalidPhoneRu, menuKz, menuRu, noChildProfileKz, noChildProfileRu } from "../../const/constante.text";
+import { StepsUpdate } from "../../const/sesion";
+import { childrenTable, parentsTable } from "../../db/schema";
+import { isValidPhone, normalizePhone } from "../../tools/tools";
+import { StepHandler } from "../../types/stepContext";
 
 export const handlerParentPhone: StepHandler = async ({
   client,
@@ -54,9 +54,18 @@ export const handlerParentPhone: StepHandler = async ({
     }else{
       const noChildText = langData === 'қазақша' ? noChildProfileKz(parentFullName, parentPhone) : noChildProfileRu(parentFullName, parentPhone) 
       await client.sendMessage(chatId, noChildText, { sendSeen: false })
-      s.step = StepsUpdate.childPickOrCreate
+      s.step = StepsUpdate.childFullName
+      return
     }
   }else{
-    
+    if (!s.data.parent) {
+      console.log('')
+      return
+    }; 
+    s.data.parent.phone = phone
+    const askParentName = langData === 'қазақша' ? askParentNameKz : askParentNameRu
+    await client.sendMessage(chatId, askParentName, {sendSeen: false})
+    s.step = StepsUpdate.parentFullName
+    return
   }
 };

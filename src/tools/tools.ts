@@ -25,3 +25,15 @@ export function normalizePhone(input: string): string {
 export function isValidPhone(phone: string): boolean{
   return phone.startsWith("8") && phone.length === 11;
 }
+
+export function isValidDate(input: string): boolean{
+  if (!/^\d{2}\.\d{2}\.\d{4}$/.test(input)) return false;
+
+  const [dd, mm, yyyy] = input.split('.').map(Number);
+  if (mm < 1 || mm > 12) return false;
+
+  const daysInMonth = new Date(yyyy, mm, 0).getDate();
+  if (dd < 1 || dd > daysInMonth) return false;
+
+  return true;
+};

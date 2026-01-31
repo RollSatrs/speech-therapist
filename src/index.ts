@@ -15,7 +15,7 @@ const db = drizzle(process.env.DATABASE_URL!);
 
 const client = new Client({
   authStrategy: new LocalAuth(),
-  puppeteer: { headless: true },
+  puppeteer: { headless: false },
 });
 
 client.on('qr', async (qr: string) => {
@@ -28,18 +28,40 @@ client.on('qr', async (qr: string) => {
   }
 });
 
+client.on('authenticated', () => {
+  console.log('✅ WhatsApp клиент аутентифицирован');
+});
+
+client.on('auth_failure', (msg) => {
+  console.error('❌ Ошибка авторизации:', msg);
+});
+
 client.on('ready', () => {
   console.log('✅ WhatsApp бот готов!');
+});
+
+client.on('disconnected', (reason) => {
+  console.warn('⚠️ WhatsApp отключился:', reason);
+});
+
+client.on('change_state', (state) => {
+  console.log('ℹ️ Состояние клиента:', state);
 });
 
 client.on('message', async (msg) => {
   const chatId = msg.from;
   const rawText = msg.body
   const text = rawText.toLowerCase();
+  console.log(text)
 
-  session[chatId] ??= { step: StepsUpdate.idle, meta: {}, data: {} };
-  const s = session[chatId]
-  const langData = s.meta.language
+session[chatId] ??= {
+  step: StepsUpdate.idle,
+  meta: {},
+  data: {
+    parent: { fullname: '', phone: '' },
+    child: {fullname: '', age: '', language: ''}, // ← добавить
+  },
+};  const s = session[chatId]
   const handler = stepHandlers[s.step]
   if(!handler) return
   await handler({client, db, chatId, rawText, text, s})

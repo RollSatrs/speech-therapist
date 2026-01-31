@@ -4,7 +4,7 @@ export type language=
 | 'русский'
 | 'қазақша'
 
-export type childLanguageType = 'kazakh' | 'russian' | 'bilingual'
+export type childLanguageType = 'kazakh' | 'russian' | 'bilingual'| ''
 // export type childAgeType = '1 лет' | '2 лет' | '3 лет' | '4 лет' | '5 лет' | '6 лет' | '7 лет'
 export type childAgeText = '2' | '3' | '4' | '5' | '6' | '7'
 export type childAgeType = {
@@ -12,7 +12,6 @@ export type childAgeType = {
   kz: '2 жас' | '3 жас' | '4 жас' | '5 жас' | '6 жас' | '7 жас',
   en: '2 age' | '3 age' | '4 age' | '5 age' | '6 age' | '7 age',
 }
-
 
 export type pointTest = 0 | 1 | 2
 
@@ -41,15 +40,15 @@ export interface TestType{
   }[]
 }
 
-interface SessionData {
-  parent?: {
-    fullname?: string;
-    phone?: string;
+interface DataDBType {
+  parent: {
+    fullname: string;
+    phone: string;
   };
-  child?: {
-    language?: childLanguageType;
-    fullname?: string;
-    age?: string;
+  child: {
+    language: childLanguageType;
+    fullname: string;
+    age: string;
   };
   testAnswers?: { questionText: string, answerText: string }[]
 }
@@ -58,6 +57,6 @@ export type Step = typeof StepsUpdate[keyof typeof StepsUpdate]
 
 export interface SessionType {
   step: Step;
-  data: SessionData;
+  data: DataDBType;
   meta: Meta
 }

@@ -8,7 +8,10 @@ export const StepsUpdate = {
   mainMenu: "mainMenu",
   parentPhone: "parentPhone",
   parentFullName: "parentFullName",
-  childPickOrCreate: "childPickOrCreate"  
+  childFullName: "childFullName",
+  childLanguage: "childLanguage",
+  childAge: "childAge"
+  
 } as const
 
 export const ageMap: Record<'2' | '3' | '4' | '5' | '6' | '7', childAgeType> = {

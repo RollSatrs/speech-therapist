@@ -1,6 +1,6 @@
 import { integer, pgTable, varchar, date, timestamp, pgEnum } from "drizzle-orm/pg-core";
 
-export const childLanguageEnum = pgEnum("child_language", ["ru", "kz", "both"]);
+export const childLanguageEnum = pgEnum("child_language", ["russian","kazakh","bilingual"]);
 
 export const parentsTable =  pgTable("parents", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
