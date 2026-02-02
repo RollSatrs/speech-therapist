@@ -29,9 +29,10 @@ function Sparkline({ data }: { data: { day: string; count: number }[] }) {
 export default async function AdminDashboard({
   searchParams,
 }: {
-  searchParams: { range?: string };
+  searchParams: Promise<{ range?: string }>;
 }) {
-  const range = searchParams.range === "30d" ? "30d" : "7d";
+  const params = await searchParams;
+  const range = params?.range === "30d" ? "30d" : "7d";
   const summary = await getSummary(range);
   const chart = await getDailyParents(range);
 

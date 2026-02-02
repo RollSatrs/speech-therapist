@@ -7,9 +7,10 @@ import TestEditClient from "./test-edit-client";
 export default async function EditTestPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const id = Number(params.id);
+  const resolved = await params;
+  const id = Number(resolved.id);
   const db = getDb();
   const tests = await db
     .select()

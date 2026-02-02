@@ -16,9 +16,10 @@ import { getDb } from "@/lib/db/client";
 export default async function SessionDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const id = Number(params.id);
+  const resolved = await params;
+  const id = Number(resolved.id);
   const db = getDb();
 
   const sessionRows = await db
